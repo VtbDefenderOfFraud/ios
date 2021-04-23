@@ -14,6 +14,7 @@
 		7CC6FC8D262E09E900B145AF /* LoginControllerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC6FC8C262E09E900B145AF /* LoginControllerViewController.swift */; };
 		7CEFC6492630993D009EDBD7 /* RequestProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEFC6482630993D009EDBD7 /* RequestProvider.swift */; };
 		7CEFC64D2630994C009EDBD7 /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEFC64C2630994C009EDBD7 /* DataProvider.swift */; };
+		7CEFC66B26309DE9009EDBD7 /* HistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEFC66A26309DE9009EDBD7 /* HistoryController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		7CC6FC8C262E09E900B145AF /* LoginControllerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginControllerViewController.swift; sourceTree = "<group>"; };
 		7CEFC6482630993D009EDBD7 /* RequestProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestProvider.swift; sourceTree = "<group>"; };
 		7CEFC64C2630994C009EDBD7 /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
+		7CEFC66A26309DE9009EDBD7 /* HistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryController.swift; sourceTree = "<group>"; };
 		C5C7620C2DA08CC924F29884 /* Pods_vtb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_vtb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9EC3F8B0A6D77F20CA6D05E /* Pods-vtb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vtb.release.xcconfig"; path = "Target Support Files/Pods-vtb/Pods-vtb.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,6 +95,7 @@
 		7CC6FC8A262E09BA00B145AF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7CEFC66926309DC6009EDBD7 /* History */,
 				7CC6FC8B262E09C700B145AF /* Login */,
 			);
 			path = Controllers;
@@ -113,6 +116,14 @@
 				7CEFC64C2630994C009EDBD7 /* DataProvider.swift */,
 			);
 			path = Network;
+			sourceTree = "<group>";
+		};
+		7CEFC66926309DC6009EDBD7 /* History */ = {
+			isa = PBXGroup;
+			children = (
+				7CEFC66A26309DE9009EDBD7 /* HistoryController.swift */,
+			);
+			path = History;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,6 +239,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CEFC66B26309DE9009EDBD7 /* HistoryController.swift in Sources */,
 				7CEFC6492630993D009EDBD7 /* RequestProvider.swift in Sources */,
 				7CC6FC60262E088F00B145AF /* AppDelegate.swift in Sources */,
 				7CEFC64D2630994C009EDBD7 /* DataProvider.swift in Sources */,

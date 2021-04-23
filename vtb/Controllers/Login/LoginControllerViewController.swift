@@ -43,18 +43,20 @@ class LoginController: ViewController {
         button.setTitle("Войти", for: .normal)
         button.layer.cornerRadius = 20
         
+        button.addTarget(self, action: #selector(login), for: .touchUpInside)
+        
         return button
     }()
     
-    private var authButton: UIButton = {
-        let button = UIButton()
-        
-        button.backgroundColor = .blue
-        button.setTitle("Регистрация", for: .normal)
-        button.layer.cornerRadius = 20
-        
-        return button
-    }()
+//    private var authButton: UIButton = {
+//        let button = UIButton()
+//        
+//        button.backgroundColor = .blue
+//        button.setTitle("Регистрация", for: .normal)
+//        button.layer.cornerRadius = 20
+//        
+//        return button
+//    }()
     
     private lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -64,7 +66,7 @@ class LoginController: ViewController {
         stackView.spacing = 8
         
         stackView.addArrangedSubview(self.loginButton)
-        stackView.addArrangedSubview(self.authButton)
+//        stackView.addArrangedSubview(self.authButton)
         
         return stackView
     }()
@@ -108,9 +110,23 @@ class LoginController: ViewController {
             $0.height.equalTo(44)
         }
         
-        // Do any additional setup after loading the view.
     }
 
+    @objc
+    private func login() {
+        DataProvider.shared.login {
+            AppData.isRegistered = true
+            UIApplication.mainDelegate.showRoot()
+        }
+    }
+}
+
+extension UIApplication {
+    static var mainDelegate: AppDelegate {
+        guard let delegate = self.shared.delegate as? AppDelegate else { preconditionFailure() }
+        
+        return delegate
+    }
 }
 
 class ViewController: UIViewController {
@@ -120,4 +136,30 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         // Do any additional setup after loading the view.
     }
+}
+
+
+@propertyWrapper
+struct Storage<T> {
+    private let key: String
+    private let defaultValue: T
+    
+    init(key: String, defaultValue: T) {
+        self.key = key
+        self.defaultValue = defaultValue
+    }
+    
+    var wrappedValue: T {
+        get {
+            return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: key)
+        }
+    }
+}
+
+struct AppData {
+    @Storage(key: "isRegistered", defaultValue: false)
+    static var isRegistered: Bool
 }

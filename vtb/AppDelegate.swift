@@ -24,8 +24,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     
     func showRoot() {
-        let navigation = UINavigationController(rootViewController: LoginController())
-        self.window?.rootViewController = navigation
+        let navigation = UINavigationController(rootViewController: HistoryController())
+        self.window?.rootViewController = AppData.isRegistered ? navigation : LoginController()
         self.window?.makeKeyAndVisible()
     }
 
