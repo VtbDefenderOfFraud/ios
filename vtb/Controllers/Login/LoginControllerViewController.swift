@@ -19,18 +19,21 @@ class LoginController: ViewController {
         return imageView
     }()
     
-    private var loginTextField: UITextField = {
+    private lazy var loginTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Логин"
+        textField.delegate = self
         
         textField.borderStyle = .roundedRect
         return textField
     }()
     
-    private var passwordTextField: UITextField = {
+    private lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Пароль"
+        textField.delegate = self
         
+        textField.isSecureTextEntry = true
         textField.borderStyle = .roundedRect
         
         return textField
@@ -48,16 +51,6 @@ class LoginController: ViewController {
         return button
     }()
     
-//    private var authButton: UIButton = {
-//        let button = UIButton()
-//        
-//        button.backgroundColor = .blue
-//        button.setTitle("Регистрация", for: .normal)
-//        button.layer.cornerRadius = 20
-//        
-//        return button
-//    }()
-    
     private lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         
@@ -66,7 +59,6 @@ class LoginController: ViewController {
         stackView.spacing = 8
         
         stackView.addArrangedSubview(self.loginButton)
-//        stackView.addArrangedSubview(self.authButton)
         
         return stackView
     }()
@@ -85,13 +77,25 @@ class LoginController: ViewController {
         return stackView
     }()
     
+    private lazy var scrollView: UIScrollView = {
+       let scrollView = UIScrollView()
+        scrollView.showsVerticalScrollIndicator = false
+        return scrollView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubview(stackView)
+        view.addSubview(scrollView)
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(16)
+        }
+        
+        scrollView.addSubview(stackView)
+        
         stackView.snp.makeConstraints {
-            $0.center.equalToSuperview()
-            $0.width.equalToSuperview().offset(-32)
+            $0.top.bottom.equalToSuperview()
+            $0.width.equalToSuperview()
         }
         
         imageView.snp.makeConstraints {
@@ -110,14 +114,81 @@ class LoginController: ViewController {
             $0.height.equalTo(44)
         }
         
+        scrollView.contentInset.top = 100
+        scrollView.contentSize.height = stackView.frame.height
+        
+        UIResponder
+            .keyboardWillHideNotification
+            .observe(in: self, selector: #selector(keyboardWillHide))
+        UIResponder
+            .keyboardDidShowNotification
+            .observe(in: self, selector: #selector(keyboardDidShow))
+        
+        loginButton.isEnabled = false
+        loginButton.backgroundColor = .blue.withAlphaComponent(0.6)
+    }
+    
+    @objc
+    private func keyboardWillHide(_ notification: Notification) {
+        scrollView.contentInset.bottom = .zero
+    }
+    
+    @objc
+    private func keyboardDidShow(_ notification: Notification) {
+        guard let info = notification.userInfo?[UIApplication.keyboardFrameEndUserInfoKey] as? NSValue else { return }
+        
+        scrollView.contentInset.bottom = info.cgRectValue.height
+        
+        let bottomOffset = CGPoint(x: 0, y: scrollView.contentSize.height - scrollView.bounds.height + scrollView.contentInset.bottom)
+        scrollView.setContentOffset(bottomOffset, animated: true)
     }
 
     @objc
     private func login() {
-        DataProvider.shared.login {
-            AppData.isRegistered = true
-            UIApplication.mainDelegate.showRoot()
+        self.view.showActivity()
+        self.view.resignFirstResponder()
+        
+        guard let login = loginTextField.text,
+           !login.isEmpty,
+           let password = passwordTextField.text,
+           !password.isEmpty else {
+            self.alert(message: "Заполните данные")
+            return
         }
+        
+        DataProvider.shared.login(login: login, password: password) { [weak self] response in
+            if let json = response.json as? [String: Any],
+               let token = json["access_token"] as? String {
+                AppData.token = token
+                AppData.isRegistered = true
+                UIApplication.mainDelegate.showRoot()
+            } else {
+                self?.alert(message: response.errorCode?.message)
+                self?.view.hideActivity()
+            }
+        }
+    }
+    
+    private func alert(message: String?) {
+        let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+}
+
+extension LoginController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let login = loginTextField.text,
+           !login.isEmpty,
+           let password = passwordTextField.text,
+           !password.isEmpty {
+            self.loginButton.isEnabled = true
+            loginButton.backgroundColor = .blue
+        }
+        
+        return true
     }
 }
 
@@ -134,7 +205,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .white
-        // Do any additional setup after loading the view.
     }
 }
 
@@ -162,4 +232,16 @@ struct Storage<T> {
 struct AppData {
     @Storage(key: "isRegistered", defaultValue: false)
     static var isRegistered: Bool
+    
+    @Storage(key: "token", defaultValue: "")
+    static var token: String
+}
+
+public extension Notification.Name {
+    func observe(in observer: Any,
+                 using center: NotificationCenter = .default,
+                 selector: Selector,
+                 object: Any? = nil) {
+        center.addObserver(observer, selector: selector, name: self, object: object)
+    }
 }

@@ -13,7 +13,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
         
@@ -24,7 +23,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     
     func showRoot() {
-        let navigation = UINavigationController(rootViewController: HistoryController())
+        let navigation = UINavigationController(rootViewController: TabBarController())
         self.window?.rootViewController = AppData.isRegistered ? navigation : LoginController()
         self.window?.makeKeyAndVisible()
     }

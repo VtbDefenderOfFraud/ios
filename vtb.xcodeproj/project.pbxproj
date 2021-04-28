@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		01C0A02195E3D6934072AD14 /* Pods_vtb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C7620C2DA08CC924F29884 /* Pods_vtb.framework */; };
+		7C91063D2632FA48002AD52B /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C91063C2632FA48002AD52B /* ProfileController.swift */; };
 		7CC6FC60262E088F00B145AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC6FC5F262E088F00B145AF /* AppDelegate.swift */; };
 		7CC6FC69262E089100B145AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CC6FC68262E089100B145AF /* Assets.xcassets */; };
 		7CC6FC6C262E089100B145AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CC6FC6A262E089100B145AF /* LaunchScreen.storyboard */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		169D966B232DB8A56447A4A6 /* Pods-vtb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vtb.debug.xcconfig"; path = "Target Support Files/Pods-vtb/Pods-vtb.debug.xcconfig"; sourceTree = "<group>"; };
+		7C91063C2632FA48002AD52B /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		7CC6FC5C262E088F00B145AF /* vtb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vtb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CC6FC5F262E088F00B145AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7CC6FC68262E089100B145AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -61,6 +63,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7C91063F2632FA4D002AD52B /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				7C91063C2632FA48002AD52B /* ProfileController.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		7CC6FC53262E088F00B145AF = {
 			isa = PBXGroup;
 			children = (
@@ -82,8 +92,8 @@
 		7CC6FC5E262E088F00B145AF /* vtb */ = {
 			isa = PBXGroup;
 			children = (
-				7CEFC6462630991C009EDBD7 /* Network */,
 				7CC6FC8A262E09BA00B145AF /* Controllers */,
+				7CEFC6462630991C009EDBD7 /* Network */,
 				7CC6FC5F262E088F00B145AF /* AppDelegate.swift */,
 				7CC6FC68262E089100B145AF /* Assets.xcassets */,
 				7CC6FC6A262E089100B145AF /* LaunchScreen.storyboard */,
@@ -95,6 +105,7 @@
 		7CC6FC8A262E09BA00B145AF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7C91063F2632FA4D002AD52B /* Profile */,
 				7CEFC66926309DC6009EDBD7 /* History */,
 				7CC6FC8B262E09C700B145AF /* Login */,
 			);
@@ -244,6 +255,7 @@
 				7CC6FC60262E088F00B145AF /* AppDelegate.swift in Sources */,
 				7CEFC64D2630994C009EDBD7 /* DataProvider.swift in Sources */,
 				7CC6FC8D262E09E900B145AF /* LoginControllerViewController.swift in Sources */,
+				7C91063D2632FA48002AD52B /* ProfileController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
