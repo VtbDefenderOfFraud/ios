@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>553688724956-o9u762uvg5o2kvn2kiviegvdpedcclc6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.553688724956-o9u762uvg5o2kvn2kiviegvdpedcclc6</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDxfBELdpHEvAUlqDwfAyVkVReph9NuJCs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>553688724956</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>rugarusik.vtb.defender</string>
+	<key>PROJECT_ID</key>
+	<string>vtb-defender</string>
+	<key>STORAGE_BUCKET</key>
+	<string>vtb-defender.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:553688724956:ios:80230beb6c7d8f10eb4b19</string>
+</dict>
+</plist>

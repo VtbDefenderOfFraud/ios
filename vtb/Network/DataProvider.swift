@@ -26,6 +26,7 @@ final class DataProvider: NSObject {
         
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
+//        urlRequest.en
         
         let body: [String: Any] = [
             "grant_type": "client_credentials",
@@ -34,11 +35,12 @@ final class DataProvider: NSObject {
             "scope": "api1.all"
         ]
         
-        print(body)
-        urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        let jsonString = body.reduce("") { "\($0)\($1.0)=\($1.1)&" }.dropLast()
+        let jsonData = jsonString.data(using: .utf8, allowLossyConversion: false)!
+        urlRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
         
-        urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: body)
-                
+        urlRequest.httpBody = jsonData
+        
         return self.request(urlRequest, completion: completion)
     }
     

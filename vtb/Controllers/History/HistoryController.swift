@@ -18,6 +18,8 @@ final class HistoryController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.tabBarController?.title = "История"
+        
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -114,11 +116,14 @@ final class TabBarController: UITabBarController {
     private var mainControllers: [UIViewController] {
         let controller1 = HistoryController()
         controller1.tabBarItem.title = "История"
+        
+        let controller2 = CreditIndexController()
+        controller2.tabBarItem.title = "Кредитный индекс"
 //        controller1.tabBarItem.image = #imageLiteral(resourceName: "tab_bar_portfolio.pdf")
         
         
-        let controller2 = ProfileController()
-        controller2.tabBarItem.title = "Профиль"
+//        let controller2 = ProfileController()
+//        controller2.tabBarItem.title = "Профиль"
 //        controller5.tabBarItem.image = #imageLiteral(resourceName: "tab_bar_profile.pdf")
         
         return [controller1, controller2]

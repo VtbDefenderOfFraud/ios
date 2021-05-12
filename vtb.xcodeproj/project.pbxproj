@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		01C0A02195E3D6934072AD14 /* Pods_vtb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C7620C2DA08CC924F29884 /* Pods_vtb.framework */; };
+		7C410652264022F700CC238B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C410651264022F700CC238B /* GoogleService-Info.plist */; };
+		7C74ABB7264BED8400666469 /* CreditIndexController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C74ABB6264BED8400666469 /* CreditIndexController.swift */; };
 		7C91063D2632FA48002AD52B /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C91063C2632FA48002AD52B /* ProfileController.swift */; };
 		7CC6FC60262E088F00B145AF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC6FC5F262E088F00B145AF /* AppDelegate.swift */; };
 		7CC6FC69262E089100B145AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CC6FC68262E089100B145AF /* Assets.xcassets */; };
@@ -20,6 +22,8 @@
 
 /* Begin PBXFileReference section */
 		169D966B232DB8A56447A4A6 /* Pods-vtb.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vtb.debug.xcconfig"; path = "Target Support Files/Pods-vtb/Pods-vtb.debug.xcconfig"; sourceTree = "<group>"; };
+		7C410651264022F700CC238B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7C74ABB6264BED8400666469 /* CreditIndexController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditIndexController.swift; sourceTree = "<group>"; };
 		7C91063C2632FA48002AD52B /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		7CC6FC5C262E088F00B145AF /* vtb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vtb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CC6FC5F262E088F00B145AF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +67,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7C74ABB5264BED6400666469 /* CreditIndex */ = {
+			isa = PBXGroup;
+			children = (
+				7C74ABB6264BED8400666469 /* CreditIndexController.swift */,
+			);
+			path = CreditIndex;
+			sourceTree = "<group>";
+		};
 		7C91063F2632FA4D002AD52B /* Profile */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +109,7 @@
 				7CC6FC5F262E088F00B145AF /* AppDelegate.swift */,
 				7CC6FC68262E089100B145AF /* Assets.xcassets */,
 				7CC6FC6A262E089100B145AF /* LaunchScreen.storyboard */,
+				7C410651264022F700CC238B /* GoogleService-Info.plist */,
 				7CC6FC6D262E089100B145AF /* Info.plist */,
 			);
 			path = vtb;
@@ -105,6 +118,7 @@
 		7CC6FC8A262E09BA00B145AF /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7C74ABB5264BED6400666469 /* CreditIndex */,
 				7C91063F2632FA4D002AD52B /* Profile */,
 				7CEFC66926309DC6009EDBD7 /* History */,
 				7CC6FC8B262E09C700B145AF /* Login */,
@@ -198,6 +212,7 @@
 			files = (
 				7CC6FC6C262E089100B145AF /* LaunchScreen.storyboard in Resources */,
 				7CC6FC69262E089100B145AF /* Assets.xcassets in Resources */,
+				7C410652264022F700CC238B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +270,7 @@
 				7CC6FC60262E088F00B145AF /* AppDelegate.swift in Sources */,
 				7CEFC64D2630994C009EDBD7 /* DataProvider.swift in Sources */,
 				7CC6FC8D262E09E900B145AF /* LoginControllerViewController.swift in Sources */,
+				7C74ABB7264BED8400666469 /* CreditIndexController.swift in Sources */,
 				7C91063D2632FA48002AD52B /* ProfileController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,12 +412,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LHZDXNV5B7;
 				INFOPLIST_FILE = vtb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = rugarusik.vtb;
+				PRODUCT_BUNDLE_IDENTIFIER = rugarusik.vtb.defender;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -415,12 +432,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LHZDXNV5B7;
 				INFOPLIST_FILE = vtb/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = rugarusik.vtb;
+				PRODUCT_BUNDLE_IDENTIFIER = rugarusik.vtb.defender;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
