@@ -10,83 +10,84 @@ import UIKit
 final class HistoryController: ViewController {
 
     private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
+        let tableView = UITableView(frame: .zero, style: .plain)
         
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        tableView.register(HistoryCell.self, forCellReuseIdentifier: "HistoryCell")
+
         return tableView
     }()
+    
+    var credits: [Credits] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tabBarController?.title = "История"
-        
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         
         self.tableView.showActivity()
-        Request.shared.history(skip: 0, take: 10) { [weak self] _ in
+        
+        Request.shared.history(skip: 0, take: 10) { [weak self] response in
+            guard let self = self,
+                  let data = response.data,
+                  let credits: [Credits] = try? JSONDecoder().decode([Credits].self, from: data) else { return }
             
-            self?.tableView.hideActivity()
+            self.credits = credits
+            self.tableView.hideActivity()
+            self.tableView.reloadData()
         }
     }
-
 }
+
 
 extension HistoryController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return credits.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryCell", for: indexPath) as? HistoryCell else { return HistoryCell() }
         
+        cell.setup(credit: self.credits[indexPath.row])
+        
         return cell
     }
 }
 
+struct Credits: Codable {
+    let bankName: String
+    let totalSum, payment: Int
+    let paymentDateTime: String
+    let state: Int
+}
+
 extension HistoryController: UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//
-//    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+//        switch CellType.allCases[indexPath.row] {
+//        case .user: return
+//        case .logout:
+//            self.tableView.showActivity()
+//            Request.shared.logout { [weak self] in
+//                self?.tableView.hideActivity()
+//            }
+//        }
+    }
+    
+    
 }
 
-
-
-extension UIView {
-    static let activityTag = 1005
-    
-    func showActivity() {
-        let container = UIView()
-        container.backgroundColor = .white
-        container.tag = Self.activityTag
-        
-        self.addSubview(container)
-        container.snp.makeConstraints {
-            $0.size.equalToSuperview()
-        }
-        
-        let activityView = UIActivityIndicatorView(style: .gray)
-        container.addSubview(activityView)
-        activityView.startAnimating()
-        
-        activityView.snp.makeConstraints {
-            $0.center.equalToSuperview()
-        }
-    }
-    
-    func hideActivity() {
-        self.viewInSubviews(tag: Self.activityTag)?.removeFromSuperview()
-    }
-    
-    func viewInSubviews(tag: Int) -> UIView? {
-        for view in self.subviews where view.tag == tag {
-            return view
-        }
-        
-        return nil
-    }
-}
 
 

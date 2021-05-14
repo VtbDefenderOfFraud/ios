@@ -25,6 +25,7 @@
 		7CF26BDD264EB75B00FAF7D8 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF26BDC264EB75B00FAF7D8 /* TabBarController.swift */; };
 		7CF26BE0264EBB5100FAF7D8 /* RequestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF26BDF264EBB5100FAF7D8 /* RequestController.swift */; };
 		7CF26BE3264EBC2300FAF7D8 /* RequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF26BE2264EBC2300FAF7D8 /* RequestCell.swift */; };
+		7CF26BE7264EC38200FAF7D8 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF26BE6264EC38200FAF7D8 /* UIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		7CF26BDC264EB75B00FAF7D8 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		7CF26BDF264EBB5100FAF7D8 /* RequestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestController.swift; sourceTree = "<group>"; };
 		7CF26BE2264EBC2300FAF7D8 /* RequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestCell.swift; sourceTree = "<group>"; };
+		7CF26BE6264EC38200FAF7D8 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		C5C7620C2DA08CC924F29884 /* Pods_vtb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_vtb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9EC3F8B0A6D77F20CA6D05E /* Pods-vtb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-vtb.release.xcconfig"; path = "Target Support Files/Pods-vtb/Pods-vtb.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -127,6 +129,7 @@
 		7CC6FC5E262E088F00B145AF /* vtb */ = {
 			isa = PBXGroup;
 			children = (
+				7CF26BE4264EC36A00FAF7D8 /* Extensions */,
 				7CC6FC8A262E09BA00B145AF /* Controllers */,
 				7CEFC6462630991C009EDBD7 /* Network */,
 				7CC6FC5F262E088F00B145AF /* AppDelegate.swift */,
@@ -210,6 +213,14 @@
 				7CF26BE2264EBC2300FAF7D8 /* RequestCell.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		7CF26BE4264EC36A00FAF7D8 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7CF26BE6264EC38200FAF7D8 /* UIView.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -336,6 +347,7 @@
 				7C74ABB7264BED8400666469 /* CreditIndexController.swift in Sources */,
 				7CF26BD6264EA65A00FAF7D8 /* ProfileLogoutCell.swift in Sources */,
 				7C74ABBA264BFBF300666469 /* HistoryCell.swift in Sources */,
+				7CF26BE7264EC38200FAF7D8 /* UIView.swift in Sources */,
 				7CF26BD4264EA63D00FAF7D8 /* CreditCell.swift in Sources */,
 				7CF26BDD264EB75B00FAF7D8 /* TabBarController.swift in Sources */,
 				7C91063D2632FA48002AD52B /* ProfileController.swift in Sources */,
