@@ -10,21 +10,33 @@ import UIKit
 final class ProfileController: ViewController {
     enum CellType: CaseIterable {
         case user
+        case credit
+        case chance
+        case gauge
         case logout
+        
+        
     }
 
     private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .plain)
+        let tableView = UITableView(frame: .zero, style: .grouped)
         
         tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
         tableView.delegate = self
         tableView.dataSource = self
         
         tableView.register(ProfileCell.self, forCellReuseIdentifier: "ProfileCell")
         tableView.register(ProfileLogoutCell.self, forCellReuseIdentifier: "ProfileLogoutCell")
+        tableView.register(CreditCell.self, forCellReuseIdentifier: "CreditCell")
+        tableView.register(GaugeCell.self, forCellReuseIdentifier: "GaugeCell")
 
         return tableView
     }()
+    
+    var sections: [[CellType]] = []
+    
+    var user: UserInfo?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,24 +47,65 @@ final class ProfileController: ViewController {
         }
         
         self.tableView.showActivity()
-        DataProvider.shared.history { [weak self] in
+        
+        Request.shared.userInfo { [weak self] response in
+            guard let self = self,
+                  let data = response.data,
+                  let user: UserInfo = try? JSONDecoder().decode(UserInfo.self, from: data) else { return }
             
-            self?.tableView.hideActivity()
+            self.user = user
+            self.sections = [[.user], [.credit, .chance, .gauge], [.logout]]
             
-            self?.tableView.reloadData()
+            self.tableView.hideActivity()
+            self.tableView.reloadData()
         }
     }
 }
 
+struct UserInfo: Codable {
+    let id: Int
+    let passport, name: String
+    let creditIndex, ratingMin, ratingMax: Int
+    let creditApprovalChance: Double
+}
+
 extension ProfileController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return self.sections.count
+    }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return CellType.allCases.count
+        return self.sections[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch CellType.allCases[indexPath.row] {
+        let type = self.sections[indexPath.section][indexPath.row]
+        switch type {
         case .user:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell else { return ProfileCell() }
+            
+            cell.set(name: self.user?.name)
+            
+            return cell
+        case .credit:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "CreditCell", for: indexPath) as? CreditCell else { return CreditCell() }
+            
+            cell.set(title: "Кредитный индекс", value: "\(self.user?.creditIndex ?? 0)")
+            
+            return cell
+        case .chance:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "CreditCell", for: indexPath) as? CreditCell else { return CreditCell() }
+            
+            cell.set(title: "Вероятность одобрения нового кредита", value: "\(self.user?.creditApprovalChance ?? 0)%")
+            
+            return cell
+        case .gauge:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "GaugeCell", for: indexPath) as? GaugeCell else { return GaugeCell() }
+            
+            if let ratingMin = self.user?.ratingMin,
+               let ratingMax = self.user?.ratingMax,
+               let creditIndex = self.user?.creditIndex {
+                cell.setup(min: ratingMin, max: ratingMax, value: creditIndex)
+            }
             
             return cell
         case .logout:
@@ -65,112 +118,37 @@ extension ProfileController: UITableViewDataSource {
 
 extension ProfileController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch CellType.allCases[indexPath.row] {
+        let type = self.sections[indexPath.section][indexPath.row]
+        switch type {
         case .user:
-            return 150
+            return 80
+        case .credit, .chance:
+            return UITableView.automaticDimension
         case .logout:
             return 44
+        case .gauge:
+            return 250
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        switch CellType.allCases[indexPath.row] {
-        case .user: return
-        case .logout:
-            self.tableView.showActivity()
-            DataProvider.shared.logout { [weak self] in
-                self?.tableView.hideActivity()
-            }
-        }
+//        switch CellType.allCases[indexPath.row] {
+//        case .user: return
+//        case .logout:
+//            self.tableView.showActivity()
+//            Request.shared.logout { [weak self] in
+//                self?.tableView.hideActivity()
+//            }
+//        }
     }
     
     
 }
 
-final class ProfileCell: UITableViewCell {
-    
-    private lazy var stackView: UIStackView = {
-        let stackView = UIStackView()
-        
-        stackView.addArrangedSubview(self.photo)
-        stackView.addArrangedSubview(self.titleLabel)
-        
-        stackView.spacing = 16
-        
-        return stackView
-    }()
-    
-    private lazy var photo: UIImageView = {
-        let imageView = UIImageView()
-        
-        imageView.layer.cornerRadius = 24
-        imageView.backgroundColor = .red
-        
-        return imageView
-    }()
-    
-    private var titleLabel: UILabel = {
-        let label = UILabel()
-        
-        label.numberOfLines = .zero
-        label.text = "Фамилия Имя\nОтчество"
-        
-        return label
-    }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        commonInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func commonInit() {
-        addSubview(self.stackView)
-        
-        stackView.snp.makeConstraints {
-            $0.left.equalTo(16)
-            $0.right.equalTo(-16)
-            $0.centerY.equalToSuperview()
-        }
-        
-        photo.snp.makeConstraints {
-            $0.size.equalTo(CGSize(width: 48, height: 48))
-        }
-    }
-}
 
-final class ProfileLogoutCell: UITableViewCell {
-    
-    private lazy var button: UIButton = {
-        let button = UIButton()
-        
-        button.setTitle("Выход", for: .normal)
-        button.setTitleColor(.red, for: .normal)
-        
-        return button
-    }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        commonInit()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func commonInit() {
-        self.addSubview(self.button)
-        
-        self.button.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-    }
-}
+
+
+
+

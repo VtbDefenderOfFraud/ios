@@ -1,5 +1,5 @@
 //
-//  DataProvider.swift
+//  Request.swift
 //  vtb
 //
 //  Created by Alina Golubeva on 21.04.2021.
@@ -8,9 +8,9 @@
 import Foundation
 import Alamofire
 
-final class DataProvider: NSObject {
+final class Request: NSObject {
 
-    static let shared = DataProvider()
+    static let shared = Request()
     
     private lazy var sessionManager: Session = {
         let evaluator = DisabledTrustEvaluator()
@@ -26,7 +26,6 @@ final class DataProvider: NSObject {
         
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
-//        urlRequest.en
         
         let body: [String: Any] = [
             "grant_type": "client_credentials",
@@ -45,21 +44,33 @@ final class DataProvider: NSObject {
     }
     
     @discardableResult
-    func history(completion: @escaping () -> Void) -> URLSessionTask? {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            completion()
-        }
+    func history(skip: Int, take: Int, completion: @escaping (Response) -> Void) -> URLSessionTask? {
+        guard let url = URL(string: "https://51.144.2.50:5001/api/CreditInfo?userId=\(1)&skip=\(skip)&take=\(take)") else { return nil }
         
-        return nil
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+                
+        return self.request(urlRequest, completion: completion)
     }
     
     @discardableResult
-    func userInfo(completion: @escaping () -> Void) -> URLSessionTask? {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            completion()
-        }
+    func requests(skip: Int, take: Int, completion: @escaping (Response) -> Void) -> URLSessionTask? {
+        guard let url = URL(string: "https://51.144.2.50:5001/api/CreditOrder?userId=\(1)&skip=\(skip)&take=\(take)") else { return nil }
         
-        return nil
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+                
+        return self.request(urlRequest, completion: completion)
+    }
+    
+    @discardableResult
+    func userInfo(completion: @escaping (Response) -> Void) -> URLSessionTask? {
+        guard let url = URL(string: "https://51.144.2.50:5001/api/User?id=\(1)") else { return nil }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "GET"
+                
+        return self.request(urlRequest, completion: completion)
     }
     
     @discardableResult
@@ -74,7 +85,7 @@ final class DataProvider: NSObject {
     
 }
 
-extension DataProvider {
+extension Request {
     @discardableResult
     private func request(_ request: URLRequest?,
                          completion: ((Response) -> Void)?) -> URLSessionTask? {
@@ -107,7 +118,7 @@ extension DataProvider {
                 break
             }
             
-            let response = Response(success, json: json)
+            let response = Response(success, json: json, data: data)
             
             completion?(response)
         }
@@ -116,7 +127,7 @@ extension DataProvider {
     }
 }
 
-extension DataProvider {
+extension Request {
     
     struct Response {
         
@@ -124,6 +135,7 @@ extension DataProvider {
         
         private(set) var success = false
         private(set) var json: Any?
+        private(set) var data: Data?
         private(set) var errorCode: ErrorCode?
         
         // MARK: – Error enum
@@ -148,9 +160,11 @@ extension DataProvider {
         
         // MARK: – Initializations
         
-        init(_ success: Bool, json: Any? = nil) {
+        init(_ success: Bool, json: Any? = nil, data: Data? = nil) {
             self.success = success
             self.json = json
+            self.data = data
+            
             let dict = json as? [String: Any]
             
             if let error = dict?["error"] as? String {

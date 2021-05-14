@@ -156,7 +156,7 @@ class LoginController: ViewController {
             return
         }
         
-        DataProvider.shared.login(login: login, password: password) { [weak self] response in
+        Request.shared.login(login: login, password: password) { [weak self] response in
             if let json = response.json as? [String: Any],
                let token = json["access_token"] as? String {
                 AppData.token = token

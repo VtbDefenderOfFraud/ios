@@ -26,7 +26,7 @@ final class HistoryController: ViewController {
         }
         
         self.tableView.showActivity()
-        DataProvider.shared.history { [weak self] in
+        Request.shared.history(skip: 0, take: 10) { [weak self] _ in
             
             self?.tableView.hideActivity()
         }
@@ -89,29 +89,4 @@ extension UIView {
     }
 }
 
-final class TabBarController: UITabBarController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.tabBar.isTranslucent = false
-
-        self.viewControllers = mainControllers
-    }
-    
-    private var mainControllers: [UIViewController] {
-        let controller1 = HistoryController()
-        controller1.tabBarItem.title = "История"
-        
-        let controller2 = CreditIndexController()
-        controller2.tabBarItem.title = "Кредитный индекс"
-//        controller1.tabBarItem.image = #imageLiteral(resourceName: "tab_bar_portfolio.pdf")
-        
-        
-//        let controller2 = ProfileController()
-//        controller2.tabBarItem.title = "Профиль"
-//        controller5.tabBarItem.image = #imageLiteral(resourceName: "tab_bar_profile.pdf")
-        
-        return [controller1, controller2]
-    }
-}
