@@ -17,12 +17,12 @@ final class InsuredEventsController: ViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        tableView.register(HistoryCell.self, forCellReuseIdentifier: "HistoryCell")
+        tableView.register(InsuredEventCell.self, forCellReuseIdentifier: "InsuredEventCell")
 
         return tableView
     }()
     
-    var credits: [Credits] = []
+    var events: [InsuredEvent] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,30 +32,28 @@ final class InsuredEventsController: ViewController {
             $0.edges.equalToSuperview()
         }
         
-        self.tableView.showActivity()
         
-        Request.shared.history(skip: 0, take: 10) { [weak self] response in
-            guard let self = self,
-                  let data = response.data,
-                  let credits: [Credits] = try? JSONDecoder().decode([Credits].self, from: data) else { return }
-            
-            self.credits = credits
-            self.tableView.hideActivity()
-            self.tableView.reloadData()
-        }
+        self.events = [InsuredEvent(name: "Тинькофф", sum: "200000 ₽", currentStage: InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
+                                    stages: [InsuredEvent.Stage(status: .previous, name: "Первый", date: "01.12.2020"),
+                                             InsuredEvent.Stage(status: .previous, name: "Второй", date: "01.12.2020"),
+                                             InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
+                                             InsuredEvent.Stage(status: .future, name: "Четвертый", date: "01.12.2020"),
+                                             InsuredEvent.Stage(status: .future, name: "Пятый", date: "01.12.2020")])]
+        
     }
 }
 
 
 extension InsuredEventsController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return credits.count
+        return events.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryCell", for: indexPath) as? HistoryCell else { return HistoryCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "InsuredEventCell", for: indexPath) as? InsuredEventCell else { return InsuredEventCell() }
         
-        cell.setup(credit: self.credits[indexPath.row])
+//        cell.setup(credit: self.credits[indexPath.row])
+        cell.set(name: "cfhgvjbhkjnkm")
         
         return cell
     }
@@ -69,15 +67,7 @@ extension InsuredEventsController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-//        switch CellType.allCases[indexPath.row] {
-//        case .user: return
-//        case .logout:
-//            self.tableView.showActivity()
-//            Request.shared.logout { [weak self] in
-//                self?.tableView.hideActivity()
-//            }
-//        }
+        self.present(UINavigationController(rootViewController: StagesController(insuredEvent: events[indexPath.row])),
+                     animated: true, completion: nil)
     }
-    
-    
 }

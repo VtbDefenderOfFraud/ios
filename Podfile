@@ -12,5 +12,7 @@ target 'vtb' do
   pod 'Firebase/Messaging'
   
   pod 'LMGaugeViewSwift'
+  pod "Pulsator"
+#  pod 'TimelineCards'
 
 end
