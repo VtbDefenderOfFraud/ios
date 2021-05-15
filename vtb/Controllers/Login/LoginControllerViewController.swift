@@ -45,8 +45,19 @@ class LoginController: ViewController {
         button.backgroundColor = .blue
         button.setTitle("Войти", for: .normal)
         button.layer.cornerRadius = 20
+//        button.frame.size.height = 60
         
         button.addTarget(self, action: #selector(login), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    private var registrationButton: UIButton = {
+        let button = UIButton()
+        
+        button.setTitleColor(.blue, for: .normal)
+        
+        button.setTitle("Регистрация", for: .normal)
         
         return button
     }()
@@ -70,7 +81,9 @@ class LoginController: ViewController {
         stackView.addArrangedSubview(self.imageView)
         stackView.addArrangedSubview(self.loginTextField)
         stackView.addArrangedSubview(self.passwordTextField)
-        stackView.addArrangedSubview(self.buttonStackView)
+//        stackView.addArrangedSubview(self.buttonStackView)
+        stackView.addArrangedSubview(self.loginButton)
+        stackView.addArrangedSubview(self.registrationButton)
         
         stackView.spacing = 16
         
@@ -110,9 +123,14 @@ class LoginController: ViewController {
             $0.height.equalTo(44)
         }
         
-        buttonStackView.snp.makeConstraints {
+        loginButton.snp.makeConstraints {
             $0.height.equalTo(44)
         }
+        
+        registrationButton.snp.makeConstraints {
+            $0.height.equalTo(44)
+        }
+        
         
         scrollView.contentInset.top = 100
         scrollView.contentSize.height = stackView.frame.height

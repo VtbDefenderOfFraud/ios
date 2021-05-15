@@ -63,8 +63,9 @@ final class CreditCell: UITableViewCell {
         }
     }
     
-    func set(title: String, value: String) {
+    func set(title: String, value: String, color: UIColor = .black) {
         titleLabel.text = title
+        valueLabel.textColor = color
         valueLabel.text = value
     }
 }

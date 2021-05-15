@@ -1,147 +1,121 @@
-////
-////  CreditIndexController.swift
-////  vtb
-////
-////  Created by Alina Golubeva on 12.05.2021.
-////
 //
-//import UIKit
-//import LMGaugeViewSwift
+//  CreditIndexController.swift
+//  vtb
 //
-//final class CreditIndexController: ViewController {
+//  Created by Alina Golubeva on 12.05.2021.
 //
-//    private lazy var stackView: UIStackView = {
-//        let stackView = UIStackView()
-//        
-//        stackView.axis = .vertical
-//        stackView.spacing = 16
-//        
-//        stackView.addArrangedSubview(self.titleStackView)
-//        stackView.addArrangedSubview(self.titleStackView1)
-//        stackView.addArrangedSubview(self.gaugeView)
-//        
-//        return stackView
-//    }()
-//    
-//    private lazy var titleStackView: UIStackView = {
-//        let stackView = UIStackView()
-//        
-//        stackView.addArrangedSubview(self.titleLabel)
-//        stackView.addArrangedSubview(self.valueLabel)
-//        
-//        return stackView
-//    }()
-//    
-//    private let titleLabel: UILabel = {
-//        let label = UILabel()
-//        
-//        label.numberOfLines = .zero
-//        label.font = UIFont.boldSystemFont(ofSize: 16)
-//        
-//        return label
-//    }()
-//    
-//    private let valueLabel: UILabel = {
-//        let label = UILabel()
-//        
-//        label.numberOfLines = .zero
-//        label.font = UIFont.boldSystemFont(ofSize: 16)
-//        label.textAlignment = .right
-//        
-//        return label
-//    }()
-//    
-//    private lazy var titleStackView1: UIStackView = {
-//        let stackView = UIStackView()
-//        
-//        stackView.addArrangedSubview(self.titleLabel1)
-//        stackView.addArrangedSubview(self.valueLabel1)
-//        
-//        return stackView
-//    }()
-//    
-//    private let titleLabel1: UILabel = {
-//        let label = UILabel()
-//        
-//        label.numberOfLines = .zero
-//        label.font = UIFont.boldSystemFont(ofSize: 16)
-//        
-//        return label
-//    }()
-//    
-//    private let valueLabel1: UILabel = {
-//        let label = UILabel()
-//        
-//        label.numberOfLines = .zero
-//        label.font = UIFont.boldSystemFont(ofSize: 16)
-//        label.textAlignment = .right
-//        
-//        return label
-//    }()
-//    
-//
-//    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//
-//        self.tabBarController?.title = "Кредитный индекс"
-//        
-//        self.view.addSubview(self.stackView)
-//        self.stackView.snp.makeConstraints {
-//            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(16)
-//            $0.left.equalTo(16)
-//            $0.right.bottom.equalTo(-16)
+
+import UIKit
+import LMGaugeViewSwift
+
+final class CreditIndexController: ViewController {
+    enum CellType: CaseIterable {
+        case credit
+        case chance
+        case gauge
+    }
+
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .plain)
+        
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        tableView.register(ProfileCell.self, forCellReuseIdentifier: "ProfileCell")
+        tableView.register(ProfileLogoutCell.self, forCellReuseIdentifier: "ProfileLogoutCell")
+        tableView.register(CreditCell.self, forCellReuseIdentifier: "CreditCell")
+        tableView.register(GaugeCell.self, forCellReuseIdentifier: "GaugeCell")
+
+        return tableView
+    }()
+    
+    var sections: [CellType] = []
+    
+    var user: UserInfo?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.view.addSubview(self.tableView)
+        self.tableView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        self.tableView.showActivity()
+        
+        Request.shared.userInfo { [weak self] response in
+            guard let self = self,
+                  let data = response.data,
+                  let user: UserInfo = try? JSONDecoder().decode(UserInfo.self, from: data) else { return }
+            
+            self.user = user
+            self.sections = [.credit, .chance, .gauge]
+            
+            self.tableView.hideActivity()
+            self.tableView.reloadData()
+        }
+    }
+}
+
+extension CreditIndexController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.sections.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let type = self.sections[indexPath.row]
+        switch type {
+        case .credit:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "CreditCell", for: indexPath) as? CreditCell else { return CreditCell() }
+            
+            cell.set(title: "Кредитный индекс", value: "\(self.user?.creditIndex ?? 0)", color: CreditIndex.color(index: (self.user?.creditIndex ?? 0)))
+            
+            return cell
+        case .chance:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "CreditCell", for: indexPath) as? CreditCell else { return CreditCell() }
+            
+            cell.set(title: "Вероятность одобрения нового кредита", value: "\(self.user?.creditApprovalChance ?? 0)%")
+            
+            return cell
+        case .gauge:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "GaugeCell", for: indexPath) as? GaugeCell else { return GaugeCell() }
+            
+            if let ratingMin = self.user?.ratingMin,
+               let ratingMax = self.user?.ratingMax,
+               let creditIndex = self.user?.creditIndex {
+                cell.setup(min: ratingMin, max: ratingMax, value: creditIndex)
+            }
+            
+            return cell
+        }
+    }
+}
+
+extension CreditIndexController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let type = self.sections[indexPath.row]
+        switch type {
+        case .credit, .chance:
+            return UITableView.automaticDimension
+        case .gauge:
+            return 400
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+//        switch CellType.allCases[indexPath.row] {
+//        case .user: return
+//        case .logout:
+//            self.tableView.showActivity()
+//            Request.shared.logout { [weak self] in
+//                self?.tableView.hideActivity()
+//            }
 //        }
-//        
-//        self.titleLabel.text = "Кредитный индекс"
-//        self.valueLabel.text = "700"
-//        self.titleLabel1.text = "Вероятность одобрения\nнового кредита"
-//        self.valueLabel1.text = "74%"
-//        
-//        gaugeView.minValue = 0
-//        gaugeView.maxValue = 1200
-//        gaugeView.limitValue = 1200
-//        
-//        
-//        
-//        
-////        self.tableView.showActivity()
-////        DataProvider.shared.history { [weak self] in
-////
-////            self?.tableView.hideActivity()
-////        }
-//    }
-//    
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        
-//        self.gaugeView.value = 700
-//
-//    }
-//    
-//}
-//
-//extension CreditIndexController: GaugeViewDelegate {
-//    func ringStokeColor(gaugeView: GaugeView, value: Double) -> UIColor {
-//        if value >= gaugeView.limitValue {
-//            return UIColor(red: 1, green: 59.0/255, blue: 48.0/255, alpha: 1)
-//        }
-//
-//        return UIColor(red: 11.0/255, green: 150.0/255, blue: 246.0/255, alpha: 1)
-//    }
-//}
-//
-////extension UIView {
-////
-////    var safeArea: ConstraintBasicAttributesDSL {
-////
-////        #if swift(>=3.2)
-////            if #available(iOS 11.0, *) {
-////                return self.safeAreaLayoutGuide.snp
-////            }
-////            return self.snp
-////        #else
-////            return self.snp
-////        #endif
-////    }
-////}
+    }
+    
+    
+}

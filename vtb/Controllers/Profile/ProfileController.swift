@@ -10,12 +10,7 @@ import UIKit
 final class ProfileController: ViewController {
     enum CellType: CaseIterable {
         case user
-        case credit
-        case chance
-        case gauge
         case logout
-        
-        
     }
 
     private lazy var tableView: UITableView = {
@@ -28,8 +23,6 @@ final class ProfileController: ViewController {
         
         tableView.register(ProfileCell.self, forCellReuseIdentifier: "ProfileCell")
         tableView.register(ProfileLogoutCell.self, forCellReuseIdentifier: "ProfileLogoutCell")
-        tableView.register(CreditCell.self, forCellReuseIdentifier: "CreditCell")
-        tableView.register(GaugeCell.self, forCellReuseIdentifier: "GaugeCell")
 
         return tableView
     }()
@@ -54,7 +47,7 @@ final class ProfileController: ViewController {
                   let user: UserInfo = try? JSONDecoder().decode(UserInfo.self, from: data) else { return }
             
             self.user = user
-            self.sections = [[.user], [.credit, .chance, .gauge], [.logout]]
+            self.sections = [[.user], [.logout]]
             
             self.tableView.hideActivity()
             self.tableView.reloadData()
@@ -86,28 +79,7 @@ extension ProfileController: UITableViewDataSource {
             cell.set(name: self.user?.name)
             
             return cell
-        case .credit:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "CreditCell", for: indexPath) as? CreditCell else { return CreditCell() }
-            
-            cell.set(title: "Кредитный индекс", value: "\(self.user?.creditIndex ?? 0)")
-            
-            return cell
-        case .chance:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "CreditCell", for: indexPath) as? CreditCell else { return CreditCell() }
-            
-            cell.set(title: "Вероятность одобрения нового кредита", value: "\(self.user?.creditApprovalChance ?? 0)%")
-            
-            return cell
-        case .gauge:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "GaugeCell", for: indexPath) as? GaugeCell else { return GaugeCell() }
-            
-            if let ratingMin = self.user?.ratingMin,
-               let ratingMax = self.user?.ratingMax,
-               let creditIndex = self.user?.creditIndex {
-                cell.setup(min: ratingMin, max: ratingMax, value: creditIndex)
-            }
-            
-            return cell
+
         case .logout:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileLogoutCell", for: indexPath) as? ProfileLogoutCell else { return ProfileLogoutCell() }
             
@@ -122,31 +94,43 @@ extension ProfileController: UITableViewDelegate {
         switch type {
         case .user:
             return 80
-        case .credit, .chance:
-            return UITableView.automaticDimension
         case .logout:
             return 44
-        case .gauge:
-            return 250
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-//        switch CellType.allCases[indexPath.row] {
-//        case .user: return
-//        case .logout:
-//            self.tableView.showActivity()
-//            Request.shared.logout { [weak self] in
-//                self?.tableView.hideActivity()
-//            }
-//        }
+        switch CellType.allCases[indexPath.row] {
+        case .user: return
+        case .logout:
+            self.tableView.showActivity()
+            Request.shared.logout { [weak self] in
+                self?.tableView.hideActivity()
+            }
+        }
     }
     
     
 }
 
+enum CreditIndex {
+    static func color(index: Int) -> UIColor {
+        switch index {
+        case let x where x <= 629:
+            return UIColor(red: 234/255, green: 79/255, blue: 78/255, alpha: 1)
+        case let x where x > 629 && x <= 689:
+            return UIColor(red: 245/255, green: 191/255, blue: 78/255, alpha: 1)
+        case let x where x > 689 && x <= 719:
+            return UIColor(red: 96/255, green: 174/255, blue: 139/255, alpha: 1)
+        case let x where x > 719:
+            return UIColor(red: 56/255, green: 127/255, blue: 89/255, alpha: 1)
+        default:
+            return UIColor(red: 56/255, green: 127/255, blue: 89/255, alpha: 1)
+        }
+    }
+}
 
 
 

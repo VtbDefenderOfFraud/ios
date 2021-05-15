@@ -14,7 +14,7 @@ final class GaugeCell: UITableViewCell {
         
         gaugeView.backgroundColor = .white
         gaugeView.unitOfMeasurement = ""
-        gaugeView.valueFont = UIFont.boldSystemFont(ofSize: 50)
+        gaugeView.delegate = self
         
         return gaugeView
     }()
@@ -40,7 +40,7 @@ final class GaugeCell: UITableViewCell {
     func setup(min: Int, max: Int, value: Int) {
         gaugeView.minValue = Double(min)
         gaugeView.maxValue = Double(max)
-        gaugeView.limitValue = Double(max)
+        gaugeView.limitValue = 690
         
         gaugeView.value = Double(value)
     }
@@ -48,10 +48,6 @@ final class GaugeCell: UITableViewCell {
 
 extension GaugeCell: GaugeViewDelegate {
     func ringStokeColor(gaugeView: GaugeView, value: Double) -> UIColor {
-        if value >= gaugeView.limitValue {
-            return UIColor(red: 1, green: 59.0/255, blue: 48.0/255, alpha: 1)
-        }
-
-        return UIColor(red: 11.0/255, green: 150.0/255, blue: 246.0/255, alpha: 1)
+        return CreditIndex.color(index: Int(value))
     }
 }
