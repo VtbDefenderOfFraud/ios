@@ -56,6 +56,28 @@ final class CreditIndexController: ViewController {
             self.tableView.hideActivity()
             self.tableView.reloadData()
         }
+        
+//        UNUserNotificationCenter.current().getNotificationSettings { settings in
+//            switch settings.authorizationStatus {
+//            case .authorized,
+//                 .provisional,
+//                 .ephemeral:
+////                UIApplication.shared.registerForRemoteNotifications()
+//                return
+//            case .denied:
+//                return
+//            case .notDetermined:
+//                UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { status, err in
+//                    print(status)
+//                    print(err)
+//                    DispatchQueue.main.async {
+//                    UIApplication.shared.registerForRemoteNotifications()
+//                    }
+//                }
+//            @unknown default:
+//                return
+//            }
+//        }
     }
 }
 

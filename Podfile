@@ -9,6 +9,7 @@ target 'vtb' do
   pod 'Alamofire', '~> 5.2'
   
   pod 'Firebase/Analytics'
+  pod 'Firebase/Messaging'
   
   pod 'LMGaugeViewSwift'
 
