@@ -9,16 +9,6 @@ import UIKit
 
 final class InsuredEventCell: UITableViewCell {
     
-    private lazy var stackView: UIStackView = {
-        let stackView = UIStackView()
-        
-        stackView.addArrangedSubview(self.titleIconStackView)
-        
-        stackView.spacing = 16
-        
-        return stackView
-    }()
-    
     private var titleLabel: UILabel = {
         let label = UILabel()
         
@@ -32,17 +22,25 @@ final class InsuredEventCell: UITableViewCell {
         let label = UILabel()
         
         label.numberOfLines = .zero
-        label.font = UIFont.boldSystemFont(ofSize: 22)
+        label.font = UIFont.boldSystemFont(ofSize: 16)
         
         return label
     }()
     
+    private var statusLabel: UILabel = {
+        let label = UILabel()
+        
+        label.numberOfLines = .zero
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        
+        return label
+    }()
     
     private lazy var icon: UIImageView = {
         let imageView = UIImageView()
         
-        imageView.layer.cornerRadius = 24
-        imageView.image = #imageLiteral(resourceName: "user")
+        imageView.layer.cornerRadius = 30
+        imageView.clipsToBounds = true
         
         return imageView
     }()
@@ -52,20 +50,22 @@ final class InsuredEventCell: UITableViewCell {
         
         stackView.addArrangedSubview(self.titleLabel)
         stackView.addArrangedSubview(self.priceLabel)
+        stackView.addArrangedSubview(self.statusLabel)
         
-        stackView.spacing = 8
+        stackView.spacing = 4
         stackView.axis = .vertical
         
         return stackView
     }()
     
-    private lazy var titleIconStackView: UIStackView = {
+    private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
         
         stackView.addArrangedSubview(self.icon)
         stackView.addArrangedSubview(self.titleStackView)
         
         stackView.spacing = 8
+        stackView.alignment = .top
         
         return stackView
     }()
@@ -85,16 +85,24 @@ final class InsuredEventCell: UITableViewCell {
         
         stackView.snp.makeConstraints {
             $0.left.equalTo(16)
+            $0.top.equalTo(8)
             $0.right.equalTo(-16)
-            $0.centerY.equalToSuperview()
+            $0.bottom.equalTo(-8)
         }
         
         icon.snp.makeConstraints {
-            $0.size.equalTo(CGSize(width: 48, height: 48))
+            $0.size.equalTo(CGSize(width: 60, height: 60))
         }
+        
     }
     
-    func set(name: String?) {
-        titleLabel.text = name
+    func set(event: InsuredEvent) {
+        titleLabel.text = event.name
+        priceLabel.text = event.sum
+        
+        statusLabel.text = event.currentStage.name
+        statusLabel.textColor = event.currentStage.status.color
+        
+        icon.set(url: event.icon)
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 extension UIView {
     static let activityTag = 1005
@@ -39,5 +40,13 @@ extension UIView {
         }
         
         return nil
+    }
+}
+
+extension UIImageView {
+    func set(url: String?) {
+        guard let url = url else { return }
+        
+        self.sd_setImage(with: URL(string: url), completed: nil)
     }
 }

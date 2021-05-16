@@ -7,33 +7,6 @@
 
 import UIKit
 
-struct InsuredEvent {
-    let name: String
-    let sum: String
-    let currentStage: Stage
-    let stages: [Stage]
-    
-    struct Stage: Equatable {
-        let status: Status
-        let name: String
-        let date: String
-    }
-    
-    enum Status {
-        case previous
-        case current
-        case future
-        
-        var color: UIColor {
-            switch self {
-            case .previous: return UIColor(red: 96/255, green: 174/255, blue: 139/255, alpha: 1)
-            case .current: return UIColor(red: 245/255, green: 191/255, blue: 78/255, alpha: 1)
-            case .future: return UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1)
-            }
-        }
-    }
-}
-
 final class StagesController: ViewController {
 
     private lazy var tableView: UITableView = {
@@ -81,9 +54,7 @@ extension StagesController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "StageCell", for: indexPath) as? StageCell else { return StageCell() }
-        
-//        cell.setup(credit: self.credits[indexPath.row])
-//        cell.set(name: "cfhgvjbhkjnkm")
+
         let stage = insuredEvent.stages[indexPath.row]
         
         cell.set(stage: stage, current: insuredEvent.currentStage == stage)

@@ -10,9 +10,8 @@ import UIKit
 final class InsuredEventsController: ViewController {
 
     private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .plain)
+        let tableView = UITableView(frame: .zero, style: .grouped)
         
-        tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.delegate = self
         tableView.dataSource = self
@@ -30,6 +29,7 @@ final class InsuredEventsController: ViewController {
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
         }
         
         
@@ -38,13 +38,26 @@ final class InsuredEventsController: ViewController {
                                              InsuredEvent.Stage(status: .previous, name: "Второй", date: "01.12.2020"),
                                              InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
                                              InsuredEvent.Stage(status: .future, name: "Четвертый", date: "01.12.2020"),
-                                             InsuredEvent.Stage(status: .future, name: "Пятый", date: "01.12.2020")])]
+                                             InsuredEvent.Stage(status: .future, name: "Пятый", date: "01.12.2020")], icon: "https://clck.ru/UqLU3"),
+                       InsuredEvent(name: "Тинькофф", sum: "200000 ₽", currentStage: InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
+                                                   stages: [InsuredEvent.Stage(status: .previous, name: "Первый", date: "01.12.2020"),
+                                                            InsuredEvent.Stage(status: .previous, name: "Второй", date: "01.12.2020"),
+                                                            InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
+                                                            InsuredEvent.Stage(status: .future, name: "Четвертый", date: "01.12.2020"),
+                                                            InsuredEvent.Stage(status: .future, name: "Пятый", date: "01.12.2020")], icon: "https://clck.ru/UqLU3"),
+                       InsuredEvent(name: "Тинькофф", sum: "200000 ₽", currentStage: InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
+                                                   stages: [InsuredEvent.Stage(status: .previous, name: "Первый", date: "01.12.2020"),
+                                                            InsuredEvent.Stage(status: .previous, name: "Второй", date: "01.12.2020"),
+                                                            InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
+                                                            InsuredEvent.Stage(status: .future, name: "Четвертый", date: "01.12.2020"),
+                                                            InsuredEvent.Stage(status: .future, name: "Пятый", date: "01.12.2020")], icon: "https://clck.ru/UqLU3")]
         
     }
 }
 
 
 extension InsuredEventsController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return events.count
     }
@@ -52,14 +65,14 @@ extension InsuredEventsController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "InsuredEventCell", for: indexPath) as? InsuredEventCell else { return InsuredEventCell() }
         
-//        cell.setup(credit: self.credits[indexPath.row])
-        cell.set(name: "cfhgvjbhkjnkm")
+        cell.set(event: events[indexPath.row])
         
         return cell
     }
 }
 
 extension InsuredEventsController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }

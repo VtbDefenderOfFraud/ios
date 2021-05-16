@@ -44,6 +44,17 @@ final class HistoryController: ViewController {
             self.tableView.reloadData()
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.present(InsureController(insure: Insure(name: "Тинькофф", icon: "https://clck.ru/UqLU3",
+                                                         description: "Задача организации, в особенности же консультация с широким активом представляет собой интересный эксперимент проверки дальнейших направлений развития. Идейные соображения высшего порядка, а также дальнейшее развитие различных форм деятельности способствует подготовки и реализации существенных финансовых и административных условий.")),
+                         animated: true, completion: nil)
+        }
+        
+    }
 }
 
 

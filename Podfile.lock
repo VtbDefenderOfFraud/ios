@@ -100,7 +100,9 @@ PODS:
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - PromisesObjC (1.2.12)
-  - Pulsator (0.6.0)
+  - SDWebImage (5.11.1):
+    - SDWebImage/Core (= 5.11.1)
+  - SDWebImage/Core (5.11.1)
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
@@ -108,7 +110,7 @@ DEPENDENCIES:
   - Firebase/Analytics
   - Firebase/Messaging
   - LMGaugeViewSwift
-  - Pulsator
+  - SDWebImage
   - SnapKit (~> 5.0.0)
 
 SPEC REPOS:
@@ -127,7 +129,7 @@ SPEC REPOS:
     - LMGaugeViewSwift
     - nanopb
     - PromisesObjC
-    - Pulsator
+    - SDWebImage
     - SnapKit
 
 SPEC CHECKSUMS:
@@ -145,9 +147,9 @@ SPEC CHECKSUMS:
   LMGaugeViewSwift: 049e8550417b3b00c67f396103c52fb3730550bf
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Pulsator: eb5a9f9be4bdcbd19903984c65deca6aabe50a17
+  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
-PODFILE CHECKSUM: 3dca17b343e7037aeb08805ff3cb2728a215c0c1
+PODFILE CHECKSUM: dace607e83569aed594c1ab8d339c2d03ac4a0a5
 
 COCOAPODS: 1.10.1

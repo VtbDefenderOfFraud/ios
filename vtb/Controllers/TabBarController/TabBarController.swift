@@ -15,6 +15,13 @@ final class TabBarController: UITabBarController {
         self.tabBar.isTranslucent = false
 
         self.viewControllers = mainControllers
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(change), name: NSNotification.Name(rawValue: "insure"), object: nil)
+    }
+    
+    @objc
+    private func change() {
+        selectedIndex = 2
     }
     
     private var mainControllers: [UIViewController] {
