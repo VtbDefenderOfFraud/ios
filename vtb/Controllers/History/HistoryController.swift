@@ -35,6 +35,7 @@ final class HistoryController: ViewController {
         self.tableView.showActivity()
         
         Request.shared.history(skip: 0, take: 10) { [weak self] response in
+            print(response)
             guard let self = self,
                   let data = response.data,
                   let credits: [Credits] = try? JSONDecoder().decode([Credits].self, from: data) else { return }
@@ -48,11 +49,11 @@ final class HistoryController: ViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.present(InsureController(insure: Insure(name: "Тинькофф", icon: "https://clck.ru/UqLU3",
-                                                         description: "Задача организации, в особенности же консультация с широким активом представляет собой интересный эксперимент проверки дальнейших направлений развития. Идейные соображения высшего порядка, а также дальнейшее развитие различных форм деятельности способствует подготовки и реализации существенных финансовых и административных условий.")),
-                         animated: true, completion: nil)
-        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//            self.present(InsureController(insure: Insure(name: "Тинькофф", icon: "https://clck.ru/UqLU3",
+//                                                         description: "Задача организации, в особенности же консультация с широким активом представляет собой интересный эксперимент проверки дальнейших направлений развития. Идейные соображения высшего порядка, а также дальнейшее развитие различных форм деятельности способствует подготовки и реализации существенных финансовых и административных условий.")),
+//                         animated: true, completion: nil)
+//        }
         
     }
 }
@@ -76,7 +77,19 @@ struct Credits: Codable {
     let bankName: String
     let totalSum, payment: Int
     let paymentDateTime: String
+    let bankIcoUrl: String
     let state: Int
+    
+    var date: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        
+        guard let value = formatter.date(from: paymentDateTime) else { return paymentDateTime }
+        
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        return formatter.string(from: value)
+    }
 }
 
 extension HistoryController: UITableViewDelegate {

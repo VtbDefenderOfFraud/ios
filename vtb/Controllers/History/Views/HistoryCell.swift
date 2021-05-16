@@ -12,8 +12,13 @@ final class HistoryCell: UITableViewCell {
     private lazy var container: UIView = {
         let view = UIView()
         
-        view.backgroundColor = .lightGray
+        view.backgroundColor = .white
         view.layer.cornerRadius = 20
+        
+        view.layer.shadowColor = UIColor.black.cgColor
+        view.layer.shadowOpacity = 0.3
+        view.layer.shadowOffset = .zero
+        view.layer.shadowRadius = 10
         
         return view
     }()
@@ -53,8 +58,8 @@ final class HistoryCell: UITableViewCell {
     private lazy var icon: UIImageView = {
         let imageView = UIImageView()
         
-        imageView.layer.cornerRadius = 24
-        imageView.image = #imageLiteral(resourceName: "user")
+        imageView.layer.cornerRadius = 30
+        imageView.clipsToBounds = true
         
         return imageView
     }()
@@ -77,7 +82,7 @@ final class HistoryCell: UITableViewCell {
         stackView.addArrangedSubview(self.icon)
         stackView.addArrangedSubview(self.titleStackView)
         
-        stackView.spacing = 8
+        stackView.spacing = 16
         
         return stackView
     }()
@@ -110,8 +115,6 @@ final class HistoryCell: UITableViewCell {
         
         return stackView
     }()
-    
-
     
     private var dateTitleLabel: UILabel = {
         let label = UILabel()
@@ -157,16 +160,16 @@ final class HistoryCell: UITableViewCell {
         
         container.snp.makeConstraints {
             $0.left.equalTo(16)
-            $0.top.equalTo(8)
+            $0.top.equalTo(16)
             $0.right.equalTo(-16)
-            $0.bottom.equalTo(-8)
+            $0.bottom.equalTo(-16)
         }
         
         stackView.snp.makeConstraints {
             $0.left.equalTo(16)
-            $0.top.equalTo(8)
+            $0.top.equalTo(16)
             $0.right.equalTo(-16)
-            $0.bottom.equalTo(-8)
+            $0.bottom.equalTo(-16)
         }
         
         icon.snp.makeConstraints {
@@ -186,6 +189,8 @@ final class HistoryCell: UITableViewCell {
         paymentValueLabel.text = "\(credit.payment) ₽"
         
         dateTitleLabel.text = "Дата"
-        dateValueLabel.text = credit.paymentDateTime
+        dateValueLabel.text = credit.date
+        
+        icon.set(url: credit.bankIcoUrl)
     }
 }
