@@ -16,6 +16,7 @@ final class HistoryController: ViewController {
         tableView.showsVerticalScrollIndicator = false
         tableView.delegate = self
         tableView.dataSource = self
+//        tableView.
         
         tableView.register(HistoryCell.self, forCellReuseIdentifier: "HistoryCell")
 
@@ -67,6 +68,7 @@ extension HistoryController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryCell", for: indexPath) as? HistoryCell else { return HistoryCell() }
         
+        cell.selectionStyle = .none
         cell.setup(credit: self.credits[indexPath.row])
         
         return cell

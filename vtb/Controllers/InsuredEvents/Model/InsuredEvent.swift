@@ -34,3 +34,10 @@ struct InsuredEvent {
         }
     }
 }
+
+struct UserInfo: Codable {
+    let id: Int
+    let passport, name: String
+    let creditIndex, ratingMin, ratingMax: Int
+    let creditApprovalChance: Double
+}

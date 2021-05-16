@@ -64,5 +64,18 @@ final class ProfileCell: UITableViewCell {
     
     func set(name: String?) {
         titleLabel.text = name
+        
+        photo.snp.makeConstraints {
+            $0.size.equalTo(CGSize(width: 48, height: 48))
+        }
+    }
+    
+    func set(icon: UIImage, title: String) {
+        titleLabel.text = title
+        photo.image = icon
+        
+        photo.snp.makeConstraints {
+            $0.size.equalTo(CGSize(width: 30, height: 30))
+        }
     }
 }

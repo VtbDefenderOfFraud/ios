@@ -27,7 +27,7 @@ final class TabBarController: UITabBarController {
     private var mainControllers: [UIViewController] {
         let controller1 = CreditIndexController()
         controller1.tabBarItem.title = "Кредитный рейтинг"
-        controller1.tabBarItem.image = #imageLiteral(resourceName: "credits")
+        controller1.tabBarItem.image = #imageLiteral(resourceName: "score")
         
         let controller2 = HistoryController()
         controller2.tabBarItem.title = "Кредитная история"

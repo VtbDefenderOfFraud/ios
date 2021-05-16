@@ -32,26 +32,26 @@ final class InsuredEventsController: ViewController {
             $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
         }
         
+        self.events = AppData.insures.map({ ins in
+            InsuredEvent(name: ins.name,
+                         sum: ins.sum,
+                         currentStage: InsuredEvent.Stage(status: .current, name: "Первый", date: "01.12.2020"),
+                                        stages: [InsuredEvent.Stage(status: .previous, name: "Первый", date: "01.12.2020"),
+                                                 InsuredEvent.Stage(status: .previous, name: "Второй", date: "03.06.2021"),
+                                                 InsuredEvent.Stage(status: .current, name: "Третий", date: "18.06.2021"),
+                                                 InsuredEvent.Stage(status: .future, name: "Четвертый", date: "01.07.2021"),
+                                                 InsuredEvent.Stage(status: .future, name: "Пятый", date: "10.07.2021")], icon: "https://clck.ru/UqLU3")
+        })
         
-        self.events = [InsuredEvent(name: "Тинькофф", sum: "200000 ₽", currentStage: InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
-                                    stages: [InsuredEvent.Stage(status: .previous, name: "Первый", date: "01.12.2020"),
-                                             InsuredEvent.Stage(status: .previous, name: "Второй", date: "01.12.2020"),
-                                             InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
-                                             InsuredEvent.Stage(status: .future, name: "Четвертый", date: "01.12.2020"),
-                                             InsuredEvent.Stage(status: .future, name: "Пятый", date: "01.12.2020")], icon: "https://clck.ru/UqLU3"),
-                       InsuredEvent(name: "Тинькофф", sum: "200000 ₽", currentStage: InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
-                                                   stages: [InsuredEvent.Stage(status: .previous, name: "Первый", date: "01.12.2020"),
-                                                            InsuredEvent.Stage(status: .previous, name: "Второй", date: "01.12.2020"),
-                                                            InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
-                                                            InsuredEvent.Stage(status: .future, name: "Четвертый", date: "01.12.2020"),
-                                                            InsuredEvent.Stage(status: .future, name: "Пятый", date: "01.12.2020")], icon: "https://clck.ru/UqLU3"),
-                       InsuredEvent(name: "Тинькофф", sum: "200000 ₽", currentStage: InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
-                                                   stages: [InsuredEvent.Stage(status: .previous, name: "Первый", date: "01.12.2020"),
-                                                            InsuredEvent.Stage(status: .previous, name: "Второй", date: "01.12.2020"),
-                                                            InsuredEvent.Stage(status: .current, name: "Третий", date: "01.12.2020"),
-                                                            InsuredEvent.Stage(status: .future, name: "Четвертый", date: "01.12.2020"),
-                                                            InsuredEvent.Stage(status: .future, name: "Пятый", date: "01.12.2020")], icon: "https://clck.ru/UqLU3")]
-        
+        self.events.append(InsuredEvent(name: "Тинькофф",
+                                        sum: "200000 ₽",
+                                        currentStage: InsuredEvent.Stage(status: .current, name: "Третий", date: "18.06.2021"),
+                                        stages: [InsuredEvent.Stage(status: .previous, name: "Первый", date: "01.12.2020"),
+                                                 InsuredEvent.Stage(status: .previous, name: "Второй", date: "03.06.2021"),
+                                                 InsuredEvent.Stage(status: .current, name: "Третий", date: "18.06.2021"),
+                                                 InsuredEvent.Stage(status: .future, name: "Четвертый", date: "01.07.2021"),
+                                                 InsuredEvent.Stage(status: .future, name: "Пятый", date: "10.07.2021")],
+                                        icon: "https://clck.ru/UqLU3"))
     }
 }
 

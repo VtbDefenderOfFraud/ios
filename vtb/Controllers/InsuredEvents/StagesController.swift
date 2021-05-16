@@ -57,6 +57,7 @@ extension StagesController: UITableViewDataSource {
 
         let stage = insuredEvent.stages[indexPath.row]
         
+        cell.selectionStyle = .none
         cell.set(stage: stage, current: insuredEvent.currentStage == stage)
         
         return cell

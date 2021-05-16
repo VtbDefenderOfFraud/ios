@@ -10,19 +10,25 @@ import UIKit
 final class ProfileController: ViewController {
     enum CellType: CaseIterable {
         case user
+        case documents
+        case contactDetails
+        
+        case condition
+        case politics
+        case settings
         case logout
     }
 
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         
-        tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.delegate = self
         tableView.dataSource = self
         
         tableView.register(ProfileCell.self, forCellReuseIdentifier: "ProfileCell")
         tableView.register(ProfileLogoutCell.self, forCellReuseIdentifier: "ProfileLogoutCell")
+        tableView.register(CreditCell.self, forCellReuseIdentifier: "CreditCell")
 
         return tableView
     }()
@@ -47,19 +53,12 @@ final class ProfileController: ViewController {
                   let user: UserInfo = try? JSONDecoder().decode(UserInfo.self, from: data) else { return }
             
             self.user = user
-            self.sections = [[.user], [.logout]]
+            self.sections = [[.user], [.documents, .contactDetails], [.condition, .politics], [.settings], [.logout]]
             
             self.tableView.hideActivity()
             self.tableView.reloadData()
         }
     }
-}
-
-struct UserInfo: Codable {
-    let id: Int
-    let passport, name: String
-    let creditIndex, ratingMin, ratingMax: Int
-    let creditApprovalChance: Double
 }
 
 extension ProfileController: UITableViewDataSource {
@@ -84,6 +83,40 @@ extension ProfileController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileLogoutCell", for: indexPath) as? ProfileLogoutCell else { return ProfileLogoutCell() }
             
             return cell
+        case .documents:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell else { return ProfileCell() }
+            
+            cell.set(icon: #imageLiteral(resourceName: "1"), title: "Документы")
+            
+            return cell
+            
+        case .contactDetails:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell else { return ProfileCell() }
+            
+            cell.set(icon: #imageLiteral(resourceName: "2"), title: "Контактные данные")
+            
+            return cell
+            
+        case .condition:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell else { return ProfileCell() }
+            
+            cell.set(icon: #imageLiteral(resourceName: "3"), title: "Условия обслуживания")
+            
+            return cell
+            
+        case .politics:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell else { return ProfileCell() }
+            
+            cell.set(icon: #imageLiteral(resourceName: "3"), title: "Политика конфиденциальности")
+            
+            return cell
+            
+        case .settings:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell else { return ProfileCell() }
+            
+            cell.set(icon: #imageLiteral(resourceName: "4"), title: "Настройки")
+            
+            return cell
         }
     }
 }
@@ -94,7 +127,7 @@ extension ProfileController: UITableViewDelegate {
         switch type {
         case .user:
             return 80
-        case .logout:
+        default:
             return 44
         }
     }
@@ -103,16 +136,14 @@ extension ProfileController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         switch CellType.allCases[indexPath.row] {
-        case .user: return
         case .logout:
             self.tableView.showActivity()
             Request.shared.logout { [weak self] in
                 self?.tableView.hideActivity()
             }
+        default: return
         }
     }
-    
-    
 }
 
 enum CreditIndex {

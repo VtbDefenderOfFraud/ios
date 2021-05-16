@@ -10,6 +10,8 @@ import UIKit
 struct Insure {
     let name: String
     let icon: String
+    let sum: String
+    let date: String
     let description: String
 }
 
@@ -119,13 +121,17 @@ final class InsureController: ViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var previous = AppData.insures
+        previous.append(insure)
+        
+        AppData.insures = previous
 
         self.view.addSubview(self.stackView)
         self.stackView.snp.makeConstraints {
             $0.left.equalTo(16)
             $0.top.equalTo(50)
             $0.right.equalTo(-16)
-//            $0.bottom.equalTo(-30)
         }
         
         self.icon.snp.makeConstraints {
