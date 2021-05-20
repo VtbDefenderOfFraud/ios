@@ -38,6 +38,7 @@ final class CreditIndexController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        title = "Кредитный рейтинг"
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()

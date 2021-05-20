@@ -31,7 +31,7 @@ final class InsuredEventCell: UITableViewCell {
         let label = UILabel()
         
         label.numberOfLines = .zero
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         
         return label
     }()
@@ -101,7 +101,7 @@ final class InsuredEventCell: UITableViewCell {
         priceLabel.text = event.sum
         
         statusLabel.text = event.currentStage.name
-        statusLabel.textColor = event.currentStage.status.color
+        statusLabel.textColor = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1)
         
         icon.set(url: event.icon)
     }

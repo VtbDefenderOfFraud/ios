@@ -253,9 +253,6 @@ struct AppData {
     
     @Storage(key: "token", defaultValue: "")
     static var token: String
-    
-    @Storage(key: "insure", defaultValue: [])
-    static var insures: [Insure]
 }
 
 public extension Notification.Name {

@@ -7,12 +7,36 @@
 
 import UIKit
 
-struct Insure {
+class Insure: NSObject,NSCoding {
+    func encode(with coder: NSCoder) {
+        coder.encode(self.name, forKey: "name")
+        coder.encode(self.icon, forKey: "icon")
+        coder.encode(self.sum, forKey: "sum")
+        coder.encode(self.date, forKey: "date")
+        coder.encode(self.desc, forKey: "desc")
+    }
+    
+    required init?(coder: NSCoder) {
+        self.name = coder.decodeObject(forKey: "name") as! String
+        self.icon = coder.decodeObject(forKey: "icon") as! String
+        self.sum = coder.decodeObject(forKey: "sum") as! String
+        self.date = coder.decodeObject(forKey: "date") as! String
+        self.desc = coder.decodeObject(forKey: "desc") as! String
+    }
+    
     let name: String
     let icon: String
     let sum: String
     let date: String
-    let description: String
+    let desc: String
+    
+    init(name: String, icon: String, sum: String, date: String, desc: String) {
+        self.name = name
+        self.icon = icon
+        self.sum = sum
+        self.date = date
+        self.desc = desc
+    }
 }
 
 final class InsureController: ViewController {
@@ -31,6 +55,26 @@ final class InsureController: ViewController {
         
         label.numberOfLines = .zero
         label.font = UIFont.boldSystemFont(ofSize: 24)
+        
+        return label
+    }()
+    
+    private var sumLabel: UILabel = {
+        let label = UILabel()
+        
+        label.numberOfLines = .zero
+        label.font = UIFont.boldSystemFont(ofSize: 24)
+        
+        return label
+    }()
+    
+    private var dateLabel: UILabel = {
+        let label = UILabel()
+        
+        label.numberOfLines = .zero
+        label.textAlignment = .center
+        label.textColor = UIColor(red: 153/255, green: 153/255, blue: 153/255, alpha: 1)
+        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         
         return label
     }()
@@ -55,6 +99,8 @@ final class InsureController: ViewController {
         
         stackView.addArrangedSubview(self.icon)
         stackView.addArrangedSubview(self.titleLabel)
+        stackView.addArrangedSubview(self.sumLabel)
+        stackView.addArrangedSubview(self.dateLabel)
         stackView.addArrangedSubview(self.descriptionLabel)
         stackView.addArrangedSubview(self.buttonStackView)
         
@@ -98,8 +144,27 @@ final class InsureController: ViewController {
     
     @objc
     func noAction() {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "insure"), object: nil)
-        self.dismiss(animated: true, completion: nil)
+        self.view.showActivity()
+        
+        DispatchQueue.main.async {
+            var previous = [Insure]()
+            
+            previous.append(self.insure)
+            
+            if let data = UserDefaults.standard.object(forKey: "insure") as? Data,
+               let savedArray = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [Insure] {
+                previous.append(contentsOf: savedArray)
+            }
+            
+            let dataSave = try! NSKeyedArchiver.archivedData(withRootObject: previous, requiringSecureCoding: false)
+            UserDefaults.standard.set(dataSave, forKey: "insure")
+            UserDefaults.standard.synchronize()
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "insure"), object: nil)
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     @objc
@@ -122,11 +187,6 @@ final class InsureController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var previous = AppData.insures
-        previous.append(insure)
-        
-        AppData.insures = previous
-
         self.view.addSubview(self.stackView)
         self.stackView.snp.makeConstraints {
             $0.left.equalTo(16)
@@ -146,6 +206,8 @@ final class InsureController: ViewController {
         
         self.icon.set(url: insure.icon)
         self.titleLabel.text = insure.name
-        self.descriptionLabel.text = insure.description
+        self.descriptionLabel.text = insure.desc
+        self.sumLabel.text = insure.sum
+        self.dateLabel.text = insure.date
     }
 }

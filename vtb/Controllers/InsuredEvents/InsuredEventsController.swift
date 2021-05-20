@@ -25,6 +25,8 @@ final class InsuredEventsController: ViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = "Страховые случаи"
 
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints {
@@ -32,26 +34,41 @@ final class InsuredEventsController: ViewController {
             $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
         }
         
-        self.events = AppData.insures.map({ ins in
-            InsuredEvent(name: ins.name,
-                         sum: ins.sum,
-                         currentStage: InsuredEvent.Stage(status: .current, name: "Первый", date: "01.12.2020"),
-                                        stages: [InsuredEvent.Stage(status: .previous, name: "Первый", date: "01.12.2020"),
-                                                 InsuredEvent.Stage(status: .previous, name: "Второй", date: "03.06.2021"),
-                                                 InsuredEvent.Stage(status: .current, name: "Третий", date: "18.06.2021"),
-                                                 InsuredEvent.Stage(status: .future, name: "Четвертый", date: "01.07.2021"),
-                                                 InsuredEvent.Stage(status: .future, name: "Пятый", date: "10.07.2021")], icon: "https://clck.ru/UqLU3")
-        })
+        self.tableView.showActivity()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
-        self.events.append(InsuredEvent(name: "Тинькофф",
-                                        sum: "200000 ₽",
-                                        currentStage: InsuredEvent.Stage(status: .current, name: "Третий", date: "18.06.2021"),
-                                        stages: [InsuredEvent.Stage(status: .previous, name: "Первый", date: "01.12.2020"),
-                                                 InsuredEvent.Stage(status: .previous, name: "Второй", date: "03.06.2021"),
-                                                 InsuredEvent.Stage(status: .current, name: "Третий", date: "18.06.2021"),
-                                                 InsuredEvent.Stage(status: .future, name: "Четвертый", date: "01.07.2021"),
-                                                 InsuredEvent.Stage(status: .future, name: "Пятый", date: "10.07.2021")],
-                                        icon: "https://clck.ru/UqLU3"))
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.events.removeAll()
+            
+            if let data = UserDefaults.standard.object(forKey: "insure") as? Data,
+               let savedArray = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [Insure] {
+                self.events = savedArray.map { insure in
+                    InsuredEvent(name: insure.name,
+                                 sum: insure.sum,
+                                 currentStage: InsuredEvent.Stage(status: .current, name: "Отправка заявления в кредитную организацию", date: "01.12.2020"),
+                                                stages: [InsuredEvent.Stage(status: .current, name: "Отправка заявления в кредитную организацию", date: "01.12.2020"),
+                                                         InsuredEvent.Stage(status: .future, name: "Сбор документов", date: "03.06.2021"),
+                                                         InsuredEvent.Stage(status: .future, name: "Направление заявления в полицию", date: "18.06.2021"),
+                                                         InsuredEvent.Stage(status: .future, name: "Судебное заседание", date: "01.07.2021"),
+                                                         InsuredEvent.Stage(status: .future, name: "Кредитная история восстановлена", date: "10.07.2021")], icon: insure.icon)
+                }}
+            
+            self.events.append(InsuredEvent(name: "МФО \"Копеечка онлайн\"",
+                                            sum: "200000 ₽",
+                                            currentStage: InsuredEvent.Stage(status: .current, name: "Направление заявления в полицию", date: "18.06.2021"),
+                                            stages: [InsuredEvent.Stage(status: .previous, name: "Отправка заявления в кредитную организацию", date: "01.12.2020"),
+                                                     InsuredEvent.Stage(status: .previous, name: "Сбор документов", date: "03.06.2021"),
+                                                     InsuredEvent.Stage(status: .current, name: "Направление заявления в полицию", date: "18.06.2021"),
+                                                     InsuredEvent.Stage(status: .future, name: "Судебное заседание", date: "01.07.2021"),
+                                                     InsuredEvent.Stage(status: .future, name: "Кредитная история восстановлена", date: "10.07.2021")],
+                                            icon:"https://thumbs.dreamstime.com/b/%D0%B4%D0%BE%D0%BB%D0%BB%D0%B0%D1%80%D1%8B-%D0%B1%D1%83%D0%BC%D0%B0%D0%B6%D0%BD%D0%B8%D0%BA%D0%B0-106333183.jpg"))
+            
+            self.tableView.reloadData()
+            self.tableView.hideActivity()
+        }
     }
 }
 

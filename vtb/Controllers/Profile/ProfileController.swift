@@ -14,6 +14,7 @@ final class ProfileController: ViewController {
         case contactDetails
         
         case condition
+        case help
         case politics
         case settings
         case logout
@@ -40,6 +41,8 @@ final class ProfileController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        title = "Профиль"
+        
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -53,7 +56,7 @@ final class ProfileController: ViewController {
                   let user: UserInfo = try? JSONDecoder().decode(UserInfo.self, from: data) else { return }
             
             self.user = user
-            self.sections = [[.user], [.documents, .contactDetails], [.condition, .politics], [.settings], [.logout]]
+            self.sections = [[.user], [.documents, .contactDetails], [.condition, .politics], [.help, .settings], [.logout]]
             
             self.tableView.hideActivity()
             self.tableView.reloadData()
@@ -101,6 +104,13 @@ extension ProfileController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell else { return ProfileCell() }
             
             cell.set(icon: #imageLiteral(resourceName: "3"), title: "Условия обслуживания")
+            
+            return cell
+            
+        case .help:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell else { return ProfileCell() }
+            
+            cell.set(icon: #imageLiteral(resourceName: "5"), title: "Помощь")
             
             return cell
             

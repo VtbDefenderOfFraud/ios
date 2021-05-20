@@ -25,19 +25,19 @@ final class TabBarController: UITabBarController {
     }
     
     private var mainControllers: [UIViewController] {
-        let controller1 = CreditIndexController()
+        let controller1 = UINavigationController(rootViewController: CreditIndexController())
         controller1.tabBarItem.title = "Кредитный рейтинг"
         controller1.tabBarItem.image = #imageLiteral(resourceName: "score")
         
-        let controller2 = HistoryController()
+        let controller2 = UINavigationController(rootViewController: HistoryController())
         controller2.tabBarItem.title = "Кредитная история"
         controller2.tabBarItem.image = #imageLiteral(resourceName: "credits")
         
-        let controller3 = InsuredEventsController()
+        let controller3 = UINavigationController(rootViewController: InsuredEventsController())
         controller3.tabBarItem.title = "Страховые случаи"
         controller3.tabBarItem.image = #imageLiteral(resourceName: "requests")
         
-        let controller4 = ProfileController()
+        let controller4 = UINavigationController(rootViewController: ProfileController())
         controller4.tabBarItem.title = "Профиль"
         controller4.tabBarItem.image = #imageLiteral(resourceName: "user")
         

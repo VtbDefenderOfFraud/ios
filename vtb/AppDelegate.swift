@@ -16,6 +16,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        print("push")
+        print(launchOptions?[.remoteNotification] as? [AnyHashable: Any])
+        
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
         
@@ -46,7 +49,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
     
     func showRoot() {
-        let navigation = UINavigationController(rootViewController: TabBarController())
+        let navigation = TabBarController()
         self.window?.rootViewController = AppData.isRegistered ? navigation : LoginController()
         self.window?.makeKeyAndVisible()
         
@@ -79,8 +82,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print(error)
     }
-
-
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        print("push1")
+        print(userInfo)
+        
+        completionHandler(.newData)
+    }
 }
 
 @available(iOS 10, *)
@@ -90,6 +99,10 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
   func userNotificationCenter(_ center: UNUserNotificationCenter,
                               willPresent notification: UNNotification,
     withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    
+    let userInfo = notification.request.content.userInfo
+    print("2")
+    print(userInfo)
 //    let userInfo = notification.request.content.userInfo
 //
 //    // With swizzling disabled you must let Messaging know about the message, for Analytics
@@ -110,7 +123,21 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
   func userNotificationCenter(_ center: UNUserNotificationCenter,
                               didReceive response: UNNotificationResponse,
                               withCompletionHandler completionHandler: @escaping () -> Void) {
-//    let userInfo = response.notification.request.content.userInfo
+    let userInfo = response.notification.request.content.userInfo
+    
+    print("1")
+    print(userInfo)
+    
+    if let bankIcoUrl = userInfo["bankIcoUrl"] as? String,
+       let bankName = userInfo["bankName"] as? String,
+       let orderDate = userInfo["orderDate"] as? String,
+       let totalSum = userInfo["totalSum"] as? String,
+       let text = userInfo["text"] as? String {
+        print(text)
+        let insure = Insure(name: bankName, icon: bankIcoUrl, sum: totalSum, date: orderDate, desc: text)
+        
+        self.window?.rootViewController?.present(InsureController(insure: insure), animated: true, completion: nil)
+    }
 //
 //    // [START_EXCLUDE]
 //    // Print message ID.
@@ -135,8 +162,11 @@ extension AppDelegate : MessagingDelegate {
     
     let dataDict:[String: String] = ["token": fcmToken ?? ""]
     NotificationCenter.default.post(name: Notification.Name("FCMToken"), object: nil, userInfo: dataDict)
-    // TODO: If necessary send token to application server.
-    // Note: This callback is fired at each app startup and whenever a new token is generated.
+    
+    Request.shared.token(token: fcmToken) { resp in
+        print("Отправлено \(resp)")
+    }
+    
   }
   // [END refresh_token]
 }

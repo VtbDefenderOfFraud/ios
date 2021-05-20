@@ -74,6 +74,26 @@ final class Request: NSObject {
     }
     
     @discardableResult
+    func token(token: String?, completion: @escaping (Response) -> Void) -> URLSessionTask? {
+        guard let url = URL(string: "https://51.144.2.50:5001/api/User/token") else { return nil }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        
+        let body: [String: Any] = [
+            "userId": 1,
+            "token": token ?? ""
+        ]
+        
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.httpBody = try? JSONSerialization.data(withJSONObject: body)
+         
+        print(urlRequest)
+        
+        return self.request(urlRequest, completion: completion)
+    }
+    
+    @discardableResult
     func logout(completion: @escaping () -> Void) -> URLSessionTask? {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             AppData.isRegistered = false
@@ -94,6 +114,7 @@ extension Request {
         let serverRequest = self.sessionManager.request(request)
         
         serverRequest.responseData(queue: .main) { resp in
+            print(resp)
             guard case .success(let data) = resp.result,
                   let urlResponse = resp.response else {
                                 
